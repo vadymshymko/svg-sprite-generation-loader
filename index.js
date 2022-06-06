@@ -1,21 +1,42 @@
-const path = require("path");
+const loaderUtils = require('loader-utils');
 
-const svgSpriteState = require("./utils/spriteState.js");
-const parseSvg = require("./utils/parseSvg.js");
+const svgSpriteState = require('./utils/spriteState');
+const transformSvg = require('./utils/transformSvg');
 
-module.exports = function (source) {
-  const { attributes, content } = parseSvg(source);
+function svgSpriteGenerationLoader(source) {
+  const options = {
+    symbolId: '[name]',
+    ...this.getOptions(),
+  };
 
-  const options = this.getOptions();
-  const symbolId = options.symbolId
-    ? options.symbolId(this.resourcePath)
-    : path.basename(this.resourcePath, ".svg");
+  const { attributes: parsedAttributes, content } = transformSvg(source);
 
-  if (this.target === "web") {
+  const symbolId = loaderUtils.interpolateName(
+    this,
+    typeof options.symbolId === 'string'
+      ? options.symbolId
+      : options.symbolId(this.resourcePath)
+  );
+
+  const attributes = options.attributes
+    ? options.attributes.reduce((result, attrName) => {
+        // eslint-disable-next-line no-param-reassign
+        result[attrName] = parsedAttributes[attrName];
+        return result;
+      }, {})
+    : parsedAttributes;
+
+  if (this.target === 'web') {
     svgSpriteState.addSpriteIcon({ symbolId, attributes, content });
   }
 
   return `
-    export default ${JSON.stringify({ symbolId, attributes })}
+    export default ${JSON.stringify({
+      symbolId,
+      attributes,
+      ...(options.addContent ? { content } : {}),
+    })}
   `;
-};
+}
+
+module.exports = svgSpriteGenerationLoader;

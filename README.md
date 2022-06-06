@@ -7,7 +7,7 @@ Webpack loader for generating external svg symbol sprite files
 
 ## How it works?
 
-svg-sprite-generation-loader is a webpack-loader that takes a multiple svg files, transform them, optimizes and put them back in one file.
+svg-sprite-generation-loader is a webpack-loader that takes a multiple svg files, transform them (parse and return as an object with `symbolId`, `attributes` and `content` (disabled by default) keys), optimizes and put them back in one file.
 
 Input multiple svg files, e.g:
 
@@ -71,28 +71,30 @@ Plugin options:
 
 Loader options:
 
-| Name     | Type                 | Default value                                                                                | Description                          |
-| -------- | -------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------ |
-| symbolId | `function(iconPath)` | Icon filename (without extension). For example symbolId for `file1.svg` file will be `file1` | `<symbol>`&nbsp;`id` attribute value |
+| Name       | Type                                                                                                                                                                                                                                                                  | Default value                                                                                                                         | Description                                                                                       |
+| ---------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------- |
+| symbolId   | `string`&nbsp;\|&nbsp;`function(iconPath)` - function that takes the file path of the original icon as an argument and returns the symbolId value<br /> In both cases you can use [interpolateName](https://github.com/webpack/loader-utils#interpolatename) patterns | `"[name]"` which is equal to icon filename (without extension). For example, by default symbolId for `file1.svg` file will be `file1` | `<symbol>`&nbsp;`id` attribute value.                                                             |
+| addContent | `boolean`                                                                                                                                                                                                                                                             | `false`                                                                                                                               | Add svg content as property to transformed svg object (may increase bundle size when enabled)     |
+| attributes | `string[]`                                                                                                                                                                                                                                                            |                                                                                                                                       | What attributes of the original svg need to be added to transformed svg object (By default - all) |
 
 ## Usage:
 
 In your webpack config:
 
 ```javascript
-const SvgSpriteGenerationPlugin = require("svg-sprite-generation-loader/plugin.js");
+const SvgSpriteGenerationPlugin = require('svg-sprite-generation-loader/plugin.js');
 
 module.exports = {
   plugins: [
     new SvgSpriteGenerationPlugin.Plugin({
-      spriteFilePath: "path/to/sprite/filename.svg",
+      spriteFilePath: 'path/to/sprite/filename.svg',
     }),
   ],
   module: {
     rules: [
       {
         test: /\.svg$/,
-        use: "svg-sprite-generation-loader",
+        use: 'svg-sprite-generation-loader',
       },
     ],
   },
@@ -102,7 +104,8 @@ module.exports = {
 In some source code:
 
 ```jsx
-import iconData from "path/to/some/icon-file-name.svg";
+import iconData from 'path/to/some/icon-file-name.svg';
+// by default iconData will include symbolId and attributes keys. If you enable the addContent loader option, the `content` key will also be added
 
 <svg {...iconData.attributes}>
   <use href={`path/to/sprite/filename.svg#${iconData.symbolId}`} />
