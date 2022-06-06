@@ -1,14 +1,14 @@
-const { optimize } = require("svgo");
+const { optimize } = require('svgo');
 
-const svgSpriteState = require("./utils/spriteState.js");
+const svgSpriteState = require('./utils/spriteState');
 
 class SvgSpriteGeneratorPlugin {
   static defaultOptions = {
-    spriteFilePath: "sprite.svg",
+    spriteFilePath: 'sprite.svg',
     svgo: {
       plugins: [
         {
-          name: "preset-default",
+          name: 'preset-default',
           params: {
             overrides: {
               removeUselessDefs: false,
@@ -41,7 +41,7 @@ class SvgSpriteGeneratorPlugin {
         compilation.hooks.processAssets.tap(
           SvgSpriteGeneratorPlugin.name,
           () => {
-            if (compilation.options.loader.target === "web") {
+            if (compilation.options.loader.target === 'web') {
               compilation.emitAsset(
                 `${this.options.spriteFilePath}`,
                 new RawSource(
