@@ -69,6 +69,12 @@ Plugin options:
 | spriteFilePath | `string` | `sprite.svg`                                                                               | Path to sprite file.<br /> `webpack.output.path` <br /> is included |
 | svgo           | object   | default preset with disabled `removeUselessDefs`, `removeViewBox` and `cleanupIDs` plugins | [svgo](https://github.com/svg/svgo) config object                   |
 
+Loader options:
+
+| Name     | Type                 | Default value                                                                                | Description                          |
+| -------- | -------------------- | -------------------------------------------------------------------------------------------- | ------------------------------------ |
+| symbolId | `function(iconPath)` | Icon filename (without extension). For example symbolId for `file1.svg` file will be `file1` | `<symbol>`&nbsp;`id` attribute value |
+
 ## Usage:
 
 In your webpack config:
@@ -96,9 +102,9 @@ module.exports = {
 In some source code:
 
 ```jsx
-import iconAttributes from "path/to/some/icon-file-name.svg";
+import iconData from "path/to/some/icon-file-name.svg";
 
-<svg {...iconAttributes}>
-  <use href="path/to/sprite/filename.svg#icon-file-name" />
+<svg {...iconData.attributes}>
+  <use href={`path/to/sprite/filename.svg#${iconData.symbolId}`} />
 </svg>;
 ```
