@@ -31,7 +31,11 @@ function svgSpriteGenerationLoader(source) {
   }
 
   return `
-    export default ${JSON.stringify({ symbolId, attributes })}
+    export default ${JSON.stringify({
+      symbolId,
+      attributes,
+      ...(options.addContent ? { content } : {}),
+    })}
   `;
 }
 
