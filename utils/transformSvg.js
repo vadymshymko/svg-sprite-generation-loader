@@ -1,7 +1,5 @@
 function transformSvg(source) {
-  const [, parsedAttributes, parsedContent] = source.match(
-    /<svg(.{0,})>([\s\S]+)<\/svg>/i
-  );
+  const [, parsedAttributes, content] = source.match(/<svg(.*?)>(.*?)<\/svg>/i);
 
   const attributes = parsedAttributes
     .match(/([\w-:]+)(=)?("[^<>"]*"|'[^<>']*'|[\w-:]+)/g)
@@ -18,7 +16,7 @@ function transformSvg(source) {
 
   return {
     attributes,
-    content: parsedContent.replace(/\n/g, ' ').trim(),
+    content,
   };
 }
 
