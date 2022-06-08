@@ -1,4 +1,5 @@
 const loaderUtils = require('loader-utils');
+const { optimize } = require('svgo');
 
 const svgSpriteState = require('./utils/spriteState');
 const transformSvg = require('./utils/transformSvg');
@@ -6,10 +7,35 @@ const transformSvg = require('./utils/transformSvg');
 function svgSpriteGenerationLoader(source) {
   const options = {
     symbolId: '[name]',
+    spriteFilePath: 'sprite.svg',
+    svgoOptimize: true,
+    addContent: false,
     ...this.getOptions(),
   };
 
-  const { attributes: parsedAttributes, content } = transformSvg(source);
+  const isSvgoOptimizeEnabled = !!options.svgoOptimize;
+  const svgoOptimizeConfig =
+    options.svgoOptimize === true
+      ? {
+          plugins: [
+            {
+              name: 'preset-default',
+              params: {
+                overrides: {
+                  removeViewBox: false,
+                },
+              },
+            },
+            'removeXMLNS',
+          ],
+        }
+      : options.svgoOptimize;
+
+  const iconSource = isSvgoOptimizeEnabled
+    ? optimize(source, svgoOptimizeConfig).data
+    : source;
+
+  const { attributes, content } = transformSvg(iconSource);
 
   const symbolId = loaderUtils.interpolateName(
     this,
@@ -18,16 +44,11 @@ function svgSpriteGenerationLoader(source) {
       : options.symbolId(this.resourcePath)
   );
 
-  const attributes = options.attributes
-    ? options.attributes.reduce((result, attrName) => {
-        // eslint-disable-next-line no-param-reassign
-        result[attrName] = parsedAttributes[attrName];
-        return result;
-      }, {})
-    : parsedAttributes;
-
   if (this.target === 'web') {
-    svgSpriteState.addSpriteIcon({ symbolId, attributes, content });
+    svgSpriteState.addSpriteIcon(
+      { symbolId, attributes, content },
+      options.spriteFilePath
+    );
   }
 
   return `
