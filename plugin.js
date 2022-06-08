@@ -1,30 +1,7 @@
-const { optimize } = require('svgo');
-
 const svgSpriteState = require('./utils/spriteState');
 
 class SvgSpriteGeneratorPlugin {
-  static defaultOptions = {
-    spriteFilePath: 'sprite.svg',
-    svgo: {
-      plugins: [
-        {
-          name: 'preset-default',
-          params: {
-            overrides: {
-              removeUselessDefs: false,
-              removeViewBox: false,
-              cleanupIDs: false,
-            },
-          },
-        },
-      ],
-    },
-  };
-
-  constructor(options = {}) {
-    this.options = { ...SvgSpriteGeneratorPlugin.defaultOptions, ...options };
-  }
-
+  // eslint-disable-next-line class-methods-use-this
   apply(compiler) {
     // webpack module instance can be accessed from the compiler object,
     // this ensures that correct version of the module is used
@@ -42,15 +19,12 @@ class SvgSpriteGeneratorPlugin {
           SvgSpriteGeneratorPlugin.name,
           () => {
             if (compilation.options.loader.target === 'web') {
-              compilation.emitAsset(
-                `${this.options.spriteFilePath}`,
-                new RawSource(
-                  optimize(
-                    svgSpriteState.getSpriteContent(),
-                    this.options.svgo
-                  ).data
-                )
-              );
+              Object.keys(svgSpriteState.sprites).forEach((spriteFilePath) => {
+                compilation.emitAsset(
+                  spriteFilePath,
+                  new RawSource(svgSpriteState.getSpriteContent(spriteFilePath))
+                );
+              });
             }
           }
         );
