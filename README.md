@@ -75,7 +75,7 @@ In your webpack config:
 const SvgSpriteGenerationPlugin = require('svg-sprite-generation-loader/plugin.js');
 
 module.exports = {
-  plugins: [new SvgSpriteGenerationPlugin.Plugin()],
+  plugins: [new SvgSpriteGenerationPlugin()],
   module: {
     rules: [
       {
