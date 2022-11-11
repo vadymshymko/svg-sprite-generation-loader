@@ -1,6 +1,6 @@
 {
   "name": "svg-sprite-generation-loader",
-  "version": "2.0.5",
+  "version": "2.0.6",
   "description": "Webpack loader for generating external svg symbol sprite files",
   "main": "index.js",
   "scripts": {
@@ -13,14 +13,20 @@
   },
   "keywords": [
     "svg",
-    "sprite",
-    "svg-sprite",
-    "svg-symbol",
-    "svg-symbol-sprite",
     "webpack",
-    "webpack-svg-sprite",
     "webpack-loader",
-    "webpack-plugin"
+    "svg-icons",
+    "svg-sprites",
+    "svg-sprite",
+    "svg-loader",
+    "svg-spritesheet",
+    "webpack-svg-plugin",
+    "svg-sprie-loader",
+    "svg-loaders",
+    "svg-sprite-symbols",
+    "webpack-svg",
+    "svg-sprite-icons",
+    "svgo"
   ],
   "author": "Vadym Shymko <vadymshymko@gmail.com>",
   "license": "MIT",
