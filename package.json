@@ -1,6 +1,6 @@
 {
   "name": "svg-sprite-generation-loader",
-  "version": "2.0.17",
+  "version": "2.0.18",
   "description": "Webpack loader for generating external svg symbol sprite files",
   "main": "index.js",
   "scripts": {
