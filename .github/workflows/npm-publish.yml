@@ -15,7 +15,7 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           always-auth: true
-          node-version: 14
+          node-version: 20
           registry-url: "https://registry.npmjs.org"
       - run: yarn install --frozen-lockfile
 
