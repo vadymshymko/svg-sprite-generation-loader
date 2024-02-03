@@ -1,6 +1,10 @@
 const svgSpriteState = require('./utils/spriteState');
 
 class SvgSpriteGeneratorPlugin {
+  constructor(params) {
+    this.params = params;
+  }
+
   // eslint-disable-next-line class-methods-use-this
   apply(compiler) {
     // webpack module instance can be accessed from the compiler object,
@@ -22,7 +26,7 @@ class SvgSpriteGeneratorPlugin {
               Object.keys(svgSpriteState.sprites).forEach((spriteFilePath) => {
                 compilation.emitAsset(
                   spriteFilePath,
-                  new RawSource(svgSpriteState.getSpriteContent(spriteFilePath))
+                  new RawSource(svgSpriteState.getSpriteContent(spriteFilePath, this.params))
                 );
               });
             }
