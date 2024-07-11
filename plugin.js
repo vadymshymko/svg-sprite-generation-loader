@@ -1,3 +1,4 @@
+const loaderUtils = require('loader-utils');
 const svgSpriteState = require('./utils/spriteState');
 
 class SvgSpriteGeneratorPlugin {
@@ -24,9 +25,23 @@ class SvgSpriteGeneratorPlugin {
           () => {
             if (compilation.options.loader.target === 'web') {
               Object.keys(svgSpriteState.sprites).forEach((spriteFilePath) => {
-                compilation.emitAsset(
+                const spriteContent = svgSpriteState.getSpriteContent(
                   spriteFilePath,
-                  new RawSource(svgSpriteState.getSpriteContent(spriteFilePath, this.params))
+                  this.params
+                );
+
+                const interpolatedPath = loaderUtils.interpolateName(
+                  { resourcePath: spriteFilePath },
+                  spriteFilePath,
+                  {
+                    context: compilation.options.context,
+                    content: spriteContent,
+                  }
+                );
+
+                compilation.emitAsset(
+                  interpolatedPath,
+                  new RawSource(spriteContent)
                 );
               });
             }
