@@ -21,29 +21,46 @@ class SvgSpriteGeneratorPlugin {
       SvgSpriteGeneratorPlugin.name,
       (compilation) => {
         compilation.hooks.processAssets.tap(
-          SvgSpriteGeneratorPlugin.name,
-          () => {
+          {
+            name: SvgSpriteGeneratorPlugin.name,
+            stage: webpack.Compilation.PROCESS_ASSETS_STAGE_ADDITIONAL,
+          },
+          (assets, callback) => {
             if (compilation.options.loader.target === 'web') {
-              Object.keys(svgSpriteState.sprites).forEach((spriteFilePath) => {
-                const spriteContent = svgSpriteState.getSpriteContent(
-                  spriteFilePath,
-                  this.params
-                );
+              try {
+                Object.keys(svgSpriteState.sprites).forEach(
+                  (spriteFilePath) => {
+                    const spriteContent = svgSpriteState.getSpriteContent(
+                      spriteFilePath,
+                      this.params
+                    );
 
-                const interpolatedPath = loaderUtils.interpolateName(
-                  { resourcePath: spriteFilePath },
-                  spriteFilePath,
-                  {
-                    context: compilation.options.context,
-                    content: spriteContent,
+                    const interpolatedPath = loaderUtils.interpolateName(
+                      { resourcePath: spriteFilePath },
+                      spriteFilePath,
+                      {
+                        context: compilation.options.context,
+                        content: spriteContent,
+                      }
+                    );
+
+                    if (compilation.getAsset(interpolatedPath)) {
+                      compilation.updateAsset(
+                        interpolatedPath,
+                        new RawSource(spriteContent)
+                      );
+                    } else {
+                      compilation.emitAsset(
+                        interpolatedPath,
+                        new RawSource(spriteContent)
+                      );
+                    }
                   }
                 );
-
-                compilation.emitAsset(
-                  interpolatedPath,
-                  new RawSource(spriteContent)
-                );
-              });
+              } catch (error) {
+                console.error(error);
+                callback(error);
+              }
             }
           }
         );
