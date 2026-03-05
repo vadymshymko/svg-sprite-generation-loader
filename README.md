@@ -67,6 +67,12 @@ npm install svg-sprite-generation-loader --save-dev
 yarn add svg-sprite-generation-loader --dev
 ```
 
+**pnpm**
+
+```bash
+pnpm add svg-sprite-generation-loader --save--dev
+```
+
 ## Usage:
 
 In your webpack config:
