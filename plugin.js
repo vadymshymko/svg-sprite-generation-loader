@@ -6,7 +6,6 @@ class SvgSpriteGeneratorPlugin {
     this.params = params;
   }
 
-  // eslint-disable-next-line class-methods-use-this
   apply(compiler) {
     // webpack module instance can be accessed from the compiler object,
     // this ensures that correct version of the module is used

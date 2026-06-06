@@ -26,6 +26,7 @@ git checkout -b feature/your-feature-name
 ## Reporting Issues
 
 If you find a bug or want to request a feature:
+
 - Check if it hasn’t already been reported or requested.
 - Open a new issue with a clear title and detailed description.
 
