@@ -6,7 +6,6 @@ function transformSvg(source) {
     .reduce((result, attribute) => {
       const [name, unformattedValue] = attribute.split('=');
 
-      // eslint-disable-next-line no-param-reassign
       result[name] = unformattedValue
         ? unformattedValue.replace(/['"]/g, '')
         : true;

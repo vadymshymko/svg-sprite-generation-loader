@@ -94,17 +94,7 @@ function svgSpriteGenerationLoader(source) {
   const svgoOptimizeConfig =
     options.svgoOptimize === true
       ? {
-          plugins: [
-            {
-              name: 'preset-default',
-              params: {
-                overrides: {
-                  removeViewBox: false,
-                },
-              },
-            },
-            'removeXMLNS',
-          ],
+          plugins: ['preset-default', 'removeXMLNS'],
         }
       : options.svgoOptimize;
 
