@@ -1,6 +1,6 @@
 {
   "name": "svg-sprite-generation-loader",
-  "version": "2.3.0",
+  "version": "2.3.1",
   "description": "Webpack loader for generating external svg symbol sprite files",
   "main": "index.js",
   "scripts": {
@@ -40,17 +40,17 @@
   "dependencies": {
     "loader-utils": "^3.2.1",
     "schema-utils": "^4.2.0",
-    "svgo": "^4.0.1"
+    "svgo": "^4.0.2"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
-    "eslint": "^10.6.0",
+    "eslint": "^10.8.0",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",
-    "globals": "^17.7.0",
+    "globals": "^17.8.0",
     "husky": ">=6",
-    "lint-staged": "^17.0.8",
-    "prettier": "^3.9.5"
+    "lint-staged": "^17.2.0",
+    "prettier": "^3.9.6"
   },
   "lint-staged": {
     "*.js": "eslint --cache --fix",
